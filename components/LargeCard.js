@@ -5,8 +5,8 @@ import Image from 'next/image'
 export default function LargeCard({img, title, description, button}) {
     return (
         <div className='relative py-8 mb-16'>
-            <div className='relative h-96 min-w-[300px]'>
-                <Image src={img} layout='fill' className='rounded-xl shadow-2xl'/>
+            <div className='relative h-96 min-w-[300px] rounded-xl shadow-2xl'>
+                <Image src={img} layout='fill' className='rounded-xl'/>
             </div>
             <div className='absolute top-32 left-12' >
                 <h3 className='text-4xl mb-3 w-63' >{title}</h3>
