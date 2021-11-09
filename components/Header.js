@@ -6,12 +6,14 @@ import 'react-date-range/dist/styles.css'; // main style file
 import 'react-date-range/dist/theme/default.css'; // theme css file
 
 import { DateRangePicker } from 'react-date-range';
+import { useRouter } from 'next/dist/client/router';
 
-export default function Header() {
+export default function Header({placeholder}) {
     const [searchInput, setSearchInput]=useState("")
     const [startDate, setStartDate]=useState(new Date())
     const [endDate, setEndDate]=useState(new Date())
     const [guest, setGuest] = useState(1)
+    const Router = useRouter()
 
     const handleSelect = (ranges)=>{
         setStartDate(ranges.selection.startDate)
@@ -28,21 +30,34 @@ export default function Header() {
         key:'selection'
     }
 
+    const search = ()=>{
+        Router.push({
+            pathname:'/Search',
+            query : {
+                location: searchInput,
+                startDate : startDate.toISOString(),
+                endDate : endDate.toISOString(),
+                guest:guest
+            }
+        })
+    }
+
 
     return (
         <header className='sticky top-0 z-50 grid grid-cols-3 bg-white shadow-md py-5 px-5 md:px-10' >
 
-            <div className='relative flex items-center h-10 cursor-pointer my-auto ' >
+            <div className='relative flex items-center h-10 cursor-pointer my-auto active:scale-95 transition transform duration-150 ease-out '
+             onClick={()=>Router.push("/")} >
                 <Image src="https://links.papareact.com/qd3" layout='fill' objectFit='contain' objectPosition='left'/>
             </div>
 
             <div className="flex items-center border-2 rounded-full py-2 shadow-sm ">
                 <input
-                className='flex-grow pl-5 bg-transparent outline-none text-sm' 
+                className='flex-grow overflow-x-hidden pl-5 bg-transparent outline-none text-sm' 
                 value={searchInput}
                 onChange={(e)=>setSearchInput(e.target.value)}
                 type="text" 
-                placeholder='Where you want to go ?'
+                placeholder={placeholder || 'Where you want to go ?'}
                 />
                 <SearchIcon className='hidden md:inline-flex h-8 bg-red-400 text-white rounded-full p-2 cursor-pointer md:mx-2'/>
             </div>
@@ -84,9 +99,9 @@ export default function Header() {
                                             max={16}
                                             className="w-12 pl-2 text-lg outline-none text-red-400" />
                                      </div>
-                                     <div className="flex bg-white">
-                                         <button className='flex-grow text-gray-800 hover:bg-gray-100 p-4 rounded-full ' onClick={resetInput}>Cancel</button>
-                                         <button className='flex-grow text-red-400 hover:bg-gray-100 p-4 rounded-full'>Search</button>
+                                     <div className="flex bg-white pt-4">
+                                        <button className='flex-grow text-gray-800 hover:bg-gray-100 p-4 rounded-full ' onClick={resetInput}>Cancel</button>
+                                        <button onClick={search} className='flex-grow text-red-400 hover:bg-gray-100 p-4 rounded-full'>Search</button>
                                      </div>
                     </div>
                     )
